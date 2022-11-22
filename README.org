@@ -7,6 +7,8 @@
 #+OPTIONS: author:nil ^:{}
 # Copyright (c) 2015-2021 OpenFOAM Foundation.
 
+Note this is a fork for experiments to implement a modular memory manager
+
 * About OpenFOAM
   OpenFOAM is a free, open source computational fluid dynamics (CFD) software
   package released by the OpenFOAM Foundation. It has a large user base across
