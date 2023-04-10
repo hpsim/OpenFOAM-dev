@@ -27,14 +27,17 @@ License
 #include "ListLoopM.H"
 #include "contiguous.H"
 
+
 #include <algorithm>
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
+
+// NOTE move this to memoryHandlerBase
 template<class T>
 void Foam::UList<T>::deepCopy(const UList<T>& a)
 {
-    if (a.size_ != this->size_)
+    if (a.size_ != this->size())
     {
         FatalErrorInFunction
             << "ULists have different sizes: "
@@ -42,7 +45,7 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
             << abort(FatalError);
     }
 
-    if (this->size_)
+    if (this->size())
     {
         #ifdef USEMEMCPY
         if (contiguous<T>())
@@ -64,6 +67,7 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 
 // * * * * * * * * * * * * * * * Member Operators  * * * * * * * * * * * * * //
 
+// NOTE this would be a fill
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {

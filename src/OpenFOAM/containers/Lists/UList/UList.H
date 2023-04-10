@@ -57,6 +57,7 @@ namespace Foam
 template<class T> class List;
 template<class T> class SubList;
 
+
 // Forward declaration of friend functions and operators
 template<class T> class UList;
 template<class T> void writeEntry(Ostream& os, const UList<T>&);
@@ -73,14 +74,15 @@ typedef UList<label> labelUList;
 template<class T>
 class UList
 {
-    // Private Data
+    // TODO remove this in favor of memoryHandler_
+    //- Number of elements in UList
+    label size_;
 
-        //- Number of elements in UList
-        label size_;
+    //- Vector of values of type T
+    T* __restrict__ v_;
+    // TODO end remove
 
-        //- Vector of values of type T
-        T* __restrict__ v_;
-
+    // MemoryHandler* memoryHandler_;
 
     // Private Member Functions
 

@@ -5,6 +5,8 @@ global/argList/argList.C
 global/clock/clock.C
 global/etcFiles/etcFiles.C
 
+containers/MemoryManager/MemoryManager.C
+
 fileOps = global/fileOperations
 $(fileOps)/fileOperation/fileOperation.C
 $(fileOps)/fileOperationInitialise/fileOperationInitialise.C
