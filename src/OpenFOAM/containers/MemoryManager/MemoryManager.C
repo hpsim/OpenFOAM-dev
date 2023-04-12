@@ -25,7 +25,11 @@ License
 
 #include "MemoryManager.H"
 
-#include "addToRunTimeSelectionTable.H" // for addTemplateToRunSelectionTable
+#include "addToRunTimeSelectionTable.H" 
+
+#include <algorithm>
+
+// for addTemplateToRunSelectionTable
 
 //Foam::autoPtr<Foam::MemoryHandler> Foam::MemoryHandler::New
 //(

@@ -32,6 +32,9 @@ SourceFiles
 
 \*---------------------------------------------------------------------------*/
 
+#ifndef MemoryManager_H
+#define MemoryManager_H
+
 #include "runTimeSelectionTables.H"
 #include "labelList.H"
 //#include "regIOobject.H"
@@ -105,4 +108,10 @@ public:
 
 typedef OFDefaultMemoryHandler<float> OFDefaultMemoryHandlerFloat;;
 
-}
+} // End namespace Foam
+
+//#ifdef NoRepository
+//    #include "MemoryManager.C"
+//#endif
+
+#endif
