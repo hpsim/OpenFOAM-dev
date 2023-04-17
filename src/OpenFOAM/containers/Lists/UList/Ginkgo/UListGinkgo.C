@@ -36,11 +36,11 @@ License
 template<class T>
 void Foam::UList<T>::deepCopy(const UList<T>& a)
 {
-    if (a.size_ != this->size())
+    if (a.size() != this->size())
     {
         FatalErrorInFunction
             << "ULists have different sizes: "
-            << this->size_ << " " << a.size_
+            << this->size() << " " << a.size()
             << abort(FatalError);
     }
 

@@ -32,6 +32,7 @@ License
 template<class T>
 inline Foam::UList<T>::UList()
 :
+    size_(0);
     v_(gko::share(gko::ReferenceExecutor::create()))
 {}
 
@@ -39,6 +40,7 @@ inline Foam::UList<T>::UList()
 template<class T>
 inline Foam::UList<T>::UList(T* __restrict__ v, label size)
 :
+    size_(size),
     v_(gko::array<T>::view(
         gko::share(gko::ReferenceExecutor::create()),
         size,

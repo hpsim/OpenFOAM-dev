@@ -81,6 +81,10 @@ typedef UList<label> labelUList;
 template<class T>
 class UList
 {
+
+    //- Number of elements in UList
+    label size_;
+
     //- Vector of values of type T
     gko::array<T> v_;
 
