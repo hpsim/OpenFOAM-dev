@@ -42,12 +42,18 @@ SourceFiles
 #ifndef UListGinkgo_H
 #define UListGinkgo_H
 
-#include "ginkgo/gingko.hpp"
 #include "bool.H"
 #include "label.H"
 #include "uLabel.H"
 #include "nullObject.H"
 #include "zero.H"
+
+// The OpenFOAM macro NotImplemented colides with 
+// the class NotImplemented in OF
+#pragma push_macro("NotImplemented")
+#undef NotImplemented
+#include "ginkgo/ginkgo.hpp"
+#pragma pop_macro("NotImplemented")
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
