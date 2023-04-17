@@ -32,7 +32,7 @@ License
 template<class T>
 inline Foam::UList<T>::UList()
 :
-    size_(0);
+    size_(0),
     v_(gko::share(gko::ReferenceExecutor::create()))
 {}
 
@@ -87,10 +87,10 @@ inline void Foam::UList<T>::checkStart(const label start) const
 template<class T>
 inline void Foam::UList<T>::checkSize(const label size) const
 {
-    if (size<0 || size>size())
+    if (size<0 || size>this->size())
     {
         FatalErrorInFunction
-            << "size " << size << " out of range 0 ... " << size()
+            << "size " << size << " out of range 0 ... " << this->size()
             << abort(FatalError);
     }
 }
