@@ -145,14 +145,14 @@ inline const T& Foam::UList<T>::last() const
 template<class T>
 inline const T* Foam::UList<T>::cdata() const
 {
-    return v_;
+    return v_.get_const_data();
 }
 
 
 template<class T>
 inline T* Foam::UList<T>::data()
 {
-    return v_;
+    return v_.get_data();
 }
 
 
@@ -181,7 +181,7 @@ inline T& Foam::UList<T>::operator[](const label i)
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return v_[i];
+    return v_.get_data()[i];
 }
 
 
@@ -194,7 +194,7 @@ namespace Foam
         // lazy evaluation - return false for out-of-range
         if (i < size())
         {
-            return v_[i];
+            return v_.get_const_data()[i];
         }
         else
         {
@@ -210,7 +210,7 @@ inline const T& Foam::UList<T>::operator[](const label i) const
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return v_[i];
+    return v_.get_const_data()[i];
 }
 
 
@@ -227,7 +227,7 @@ template<class T>
 inline typename Foam::UList<T>::iterator
 Foam::UList<T>::begin()
 {
-    return v_;
+    return v_.get_data();
 }
 
 
@@ -243,7 +243,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cbegin() const
 {
-    return v_;
+    return v_.get_const_data();
 }
 
 
@@ -251,7 +251,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cend() const
 {
-    return &v_[size()];
+    return &v_.get_data()[size()];
 }
 
 
@@ -259,7 +259,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::begin() const
 {
-    return v_;
+    return v_.get_const_data();
 }
 
 
@@ -267,7 +267,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::end() const
 {
-    return &v_[size()];
+    return &v_.get_const_data()[size()];
 }
 
 
