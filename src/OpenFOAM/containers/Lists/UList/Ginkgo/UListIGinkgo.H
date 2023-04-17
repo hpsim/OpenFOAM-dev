@@ -32,8 +32,9 @@ License
 template<class T>
 inline Foam::UList<T>::UList()
 :
-    size_(0);
-    v_(gko::share(gko::ReferenceExecutor::create()))
+    size_(0),
+    v_(NULL),
+    values_(gko::share(gko::ReferenceExecutor::create()))
 {}
 
 
@@ -41,7 +42,8 @@ template<class T>
 inline Foam::UList<T>::UList(T* __restrict__ v, label size)
 :
     size_(size),
-    v_(gko::array<T>::view(
+    v_(v),
+    values_(gko::array<T>::view(
         gko::share(gko::ReferenceExecutor::create()),
         size,
         v)
@@ -87,10 +89,10 @@ inline void Foam::UList<T>::checkStart(const label start) const
 template<class T>
 inline void Foam::UList<T>::checkSize(const label size) const
 {
-    if (size<0 || size>size())
+    if (size<0 || size>this->size())
     {
         FatalErrorInFunction
-            << "size " << size << " out of range 0 ... " << size()
+            << "size " << size << " out of range 0 ... " << this->size()
             << abort(FatalError);
     }
 }
@@ -145,14 +147,14 @@ inline const T& Foam::UList<T>::last() const
 template<class T>
 inline const T* Foam::UList<T>::cdata() const
 {
-    return v_;
+    return values_.get_const_data();
 }
 
 
 template<class T>
 inline T* Foam::UList<T>::data()
 {
-    return v_;
+    return values_.get_data();
 }
 
 
@@ -181,7 +183,7 @@ inline T& Foam::UList<T>::operator[](const label i)
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return v_[i];
+    return values_.get_data()[i];
 }
 
 
@@ -194,7 +196,7 @@ namespace Foam
         // lazy evaluation - return false for out-of-range
         if (i < size())
         {
-            return v_[i];
+            return values_.get_const_data()[i];
         }
         else
         {
@@ -210,7 +212,7 @@ inline const T& Foam::UList<T>::operator[](const label i) const
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return v_[i];
+    return values_.get_const_data()[i];
 }
 
 
@@ -227,7 +229,7 @@ template<class T>
 inline typename Foam::UList<T>::iterator
 Foam::UList<T>::begin()
 {
-    return v_;
+    return values_.get_data();
 }
 
 
@@ -235,7 +237,7 @@ template<class T>
 inline typename Foam::UList<T>::iterator
 Foam::UList<T>::end()
 {
-    return &v_[size()];
+    return &values_.get_data()[this->size()];
 }
 
 
@@ -243,7 +245,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cbegin() const
 {
-    return v_;
+    return values_.get_const_data();
 }
 
 
@@ -251,7 +253,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cend() const
 {
-    return &v_[size()];
+    return &values_.get_const_data()[size()];
 }
 
 
@@ -259,7 +261,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::begin() const
 {
-    return v_;
+    return values_.get_const_data();
 }
 
 
@@ -267,7 +269,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::end() const
 {
-    return &v_[size()];
+    return &values_.get_const_data()[size()];
 }
 
 
@@ -322,7 +324,7 @@ Foam::UList<T>::rend() const
 template<class T>
 inline Foam::label Foam::UList<T>::size() const
 {
-    return v_.get_num_elems();
+    return values_.get_num_elems();
 }
 
 

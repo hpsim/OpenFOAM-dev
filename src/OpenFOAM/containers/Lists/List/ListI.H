@@ -28,10 +28,11 @@ License
 template<class T>
 inline void Foam::List<T>::alloc()
 {
-    if (this->size_ > 0)
-    {
-        this->v_ = new T[this->size_];
-    }
+    // TODO implement this
+    // if (this->size_ > 0)
+    // {
+    //     this->v_ = new T[this->size_];
+    // }
 }
 
 
@@ -124,13 +125,14 @@ inline const Foam::List<T>& Foam::List<T>::null()
 template<class T>
 inline void Foam::List<T>::clear()
 {
-    if (this->v_)
-    {
-        delete[] this->v_;
-        this->v_ = 0;
-    }
+    // TODO implement this
+    // if (this->v_)
+    // {
+    //     delete[] this->v_;
+    //     this->v_ = 0;
+    // }
 
-    this->size_ = 0;
+    // this->size_ = 0;
 }
 
 

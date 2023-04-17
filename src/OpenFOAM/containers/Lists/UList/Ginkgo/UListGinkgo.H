@@ -86,7 +86,10 @@ class UList
     label size_;
 
     //- Vector of values of type T
-    gko::array<T> v_;
+    T* v_;
+
+    //- Vector of values of type T
+    gko::array<T> values_;
 
     // Private Member Functions
 

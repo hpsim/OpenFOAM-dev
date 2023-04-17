@@ -111,7 +111,8 @@ Foam::List<T>::List(const List<T>& a)
         #ifdef USEMEMCPY
         if (contiguous<T>())
         {
-            memcpy(this->v_, a.v_, this->byteSize());
+            // TODO can this be implemented in UList?
+            // memcpy(this->v_, a.v_, this->byteSize());
         }
         else
         #endif
@@ -159,9 +160,10 @@ Foam::List<T>::List(List<T>& a, bool reuse)
 {
     if (reuse)
     {
-        this->v_ = a.v_;
-        a.v_ = 0;
-        a.size_ = 0;
+        // TODO implement this
+        // this->v_ = a.v_;
+        // a.v_ = 0;
+        // a.size_ = 0;
     }
     else if (this->size_)
     {
@@ -170,7 +172,8 @@ Foam::List<T>::List(List<T>& a, bool reuse)
         #ifdef USEMEMCPY
         if (contiguous<T>())
         {
-            memcpy(this->v_, a.v_, this->byteSize());
+            // TODO can this be implemented in Ulist?
+            // memcpy(this->v_, a.v_, this->byteSize());
         }
         else
         #endif
@@ -268,10 +271,11 @@ Foam::List<T>::List(std::initializer_list<T> lst)
 template<class T>
 Foam::List<T>::~List()
 {
-    if (this->v_)
-    {
-        delete[] this->v_;
-    }
+    // TODO implement this
+    // if (this->v_)
+    // {
+    //     delete[] this->v_;
+    // }
 }
 
 
@@ -300,20 +304,23 @@ void Foam::List<T>::setSize(const label newSize)
                 #ifdef USEMEMCPY
                 if (contiguous<T>())
                 {
-                    memcpy(nv, this->v_, i*sizeof(T));
+                    // TODO implement this
+                    // memcpy(nv, this->v_, i*sizeof(T));
                 }
                 else
                 #endif
                 {
-                    T* vv = &this->v_[i];
-                    T* av = &nv[i];
-                    while (i--) *--av = *--vv;
+                    // TODO implement this
+                    // T* vv = &this->v_[i];
+                    // T* av = &nv[i];
+                    // while (i--) *--av = *--vv;
                 }
             }
 
             clear();
             this->size_ = newSize;
-            this->v_ = nv;
+            // TODO implement this
+            // this->v_ = nv;
         }
         else
         {
@@ -332,8 +339,9 @@ void Foam::List<T>::setSize(const label newSize, const T& a)
     if (newSize > oldSize)
     {
         label i = newSize - oldSize;
-        T* vv = &this->v_[newSize];
-        while (i--) *--vv = a;
+        // TODO implement this
+        // T* vv = &this->v_[newSize];
+        // while (i--) *--vv = a;
     }
 }
 
@@ -341,12 +349,13 @@ void Foam::List<T>::setSize(const label newSize, const T& a)
 template<class T>
 void Foam::List<T>::transfer(List<T>& a)
 {
-    clear();
-    this->size_ = a.size_;
-    this->v_ = a.v_;
+    // TODO implement this
+    // clear();
+    // this->size_ = a.size_;
+    // this->v_ = a.v_;
 
-    a.size_ = 0;
-    a.v_ = 0;
+    // a.size_ = 0;
+    // a.v_ = 0;
 }
 
 
@@ -381,9 +390,10 @@ void Foam::List<T>::operator=(const UList<T>& a)
     {
         #ifdef USEMEMCPY
         if (contiguous<T>())
-        {
-            memcpy(this->v_, a.v_, this->byteSize());
-        }
+        // TODO can this be implemented in UList?
+        // {
+        //     memcpy(this->v_, a.v_, this->byteSize());
+        // }
         else
         #endif
         {
