@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "UList.H"
+#include "UListGinkgo.H"
 #include "ListLoopM.H"
 #include "contiguous.H"
 
@@ -234,6 +234,6 @@ bool Foam::UList<T>::operator>=(const UList<T>& a) const
 
 // * * * * * * * * * * * * * * * *  IOStream operators * * * * * * * * * * * //
 
-#include "UListIO.C"
+#include "UListIOGinkgo.C"
 
 // ************************************************************************* //

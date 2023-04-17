@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "UList.H"
+#include "UListGinkgo.H"
 #include "Ostream.H"
 #include "token.H"
 #include "SLList.H"
