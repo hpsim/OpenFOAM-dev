@@ -152,7 +152,7 @@ template<class T>
 bool Foam::UList<T>::operator==(const UList<T>& a) const
 {
     // TODO implement
-    return false
+    return false;
 }
 
 
@@ -167,7 +167,7 @@ template<class T>
 bool Foam::UList<T>::operator<(const UList<T>& a) const
 {
     // TODO implement
-    return false
+    return false;
 }
 
 
@@ -182,7 +182,7 @@ template<class T>
 bool Foam::UList<T>::operator<=(const UList<T>& a) const
 {
     // TODO implement
-    return false
+    return false;
 }
 
 
