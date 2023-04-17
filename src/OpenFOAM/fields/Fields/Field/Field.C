@@ -607,7 +607,7 @@ void Foam::Field<Type>::operator=(const VectorSpace<Form,Cmpt,nCmpt>& vs)
 }
 
 
-#define COMPUTED_ASSIGNMENT(TYPE, op)                                          \
+#define COMPUTED_ASSIGNMENT(TYPE, op, opName)                                  \
                                                                                \
 template<class Type>                                                           \
 void Foam::Field<Type>::operator op(const UList<TYPE>& f)                      \
@@ -628,10 +628,10 @@ void Foam::Field<Type>::operator op(const TYPE& t)                             \
     TFOR_ALL_F_OP_S(Type, *this, op, TYPE, t)                                  \
 }
 
-COMPUTED_ASSIGNMENT(Type, +=)
-COMPUTED_ASSIGNMENT(Type, -=)
-COMPUTED_ASSIGNMENT(scalar, *=)
-COMPUTED_ASSIGNMENT(scalar, /=)
+COMPUTED_ASSIGNMENT(Type, +=, listAdd)
+COMPUTED_ASSIGNMENT(Type, -=, listSubtract)
+COMPUTED_ASSIGNMENT(scalar, *=, listMultiply)
+COMPUTED_ASSIGNMENT(scalar, /=, listDivide)
 
 #undef COMPUTED_ASSIGNMENT
 

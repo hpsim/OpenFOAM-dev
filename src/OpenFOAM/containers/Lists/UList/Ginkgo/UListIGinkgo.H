@@ -32,16 +32,18 @@ License
 template<class T>
 inline Foam::UList<T>::UList()
 :
-    size_(0),
-    v_(0)
+    v_(gko::share(gko::ReferenceExecutor::create()))
 {}
 
 
 template<class T>
 inline Foam::UList<T>::UList(T* __restrict__ v, label size)
 :
-    size_(size),
-    v_(v)
+    v_(gko::array<T>::view(
+        gko::share(gko::ReferenceExecutor::create()),
+        size,
+        v)
+    )
 {}
 
 
@@ -71,10 +73,10 @@ inline Foam::label Foam::UList<T>::rcIndex(const label i) const
 template<class T>
 inline void Foam::UList<T>::checkStart(const label start) const
 {
-    if (start<0 || (start && start>=size_))
+    if (start<0 || (start && start>=size()))
     {
         FatalErrorInFunction
-            << "start " << start << " out of range 0 ... " << max(size_-1, 0)
+            << "start " << start << " out of range 0 ... " << max(size()-1, 0)
             << abort(FatalError);
     }
 }
@@ -83,10 +85,10 @@ inline void Foam::UList<T>::checkStart(const label start) const
 template<class T>
 inline void Foam::UList<T>::checkSize(const label size) const
 {
-    if (size<0 || size>size_)
+    if (size<0 || size>size())
     {
         FatalErrorInFunction
-            << "size " << size << " out of range 0 ... " << size_
+            << "size " << size << " out of range 0 ... " << size()
             << abort(FatalError);
     }
 }
@@ -95,16 +97,16 @@ inline void Foam::UList<T>::checkSize(const label size) const
 template<class T>
 inline void Foam::UList<T>::checkIndex(const label i) const
 {
-    if (!size_)
+    if (!size())
     {
         FatalErrorInFunction
             << "attempt to access element from zero sized list"
             << abort(FatalError);
     }
-    else if (i<0 || i>=size_)
+    else if (i<0 || i>=size())
     {
         FatalErrorInFunction
-            << "index " << i << " out of range 0 ... " << size_-1
+            << "index " << i << " out of range 0 ... " << size()-1
             << abort(FatalError);
     }
 }
@@ -155,8 +157,10 @@ inline T* Foam::UList<T>::data()
 template<class T>
 inline void Foam::UList<T>::shallowCopy(const UList<T>& a)
 {
-    size_ = a.size_;
-    v_ = a.v_;
+    // TODO implement
+    // this would be just another view
+    // size() = a.size();
+    // v_ = a.v_;
 }
 
 
@@ -166,6 +170,12 @@ inline void Foam::UList<T>::shallowCopy(const UList<T>& a)
 template<class T>
 inline T& Foam::UList<T>::operator[](const label i)
 {
+    // TODO
+    // read access to memory
+    // 1. check if host side buffer is needed
+    // if not just return value (reference executor)
+    // else set sync flag to indicate that host side
+    // buffer was modified
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
@@ -180,7 +190,7 @@ namespace Foam
     inline const bool& Foam::UList<bool>::operator[](const label i) const
     {
         // lazy evaluation - return false for out-of-range
-        if (i < size_)
+        if (i < size())
         {
             return v_[i];
         }
@@ -223,7 +233,7 @@ template<class T>
 inline typename Foam::UList<T>::iterator
 Foam::UList<T>::end()
 {
-    return &v_[size_];
+    return &v_[size()];
 }
 
 
@@ -239,7 +249,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cend() const
 {
-    return &v_[size_];
+    return &v_[size()];
 }
 
 
@@ -255,7 +265,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::end() const
 {
-    return &v_[size_];
+    return &v_[size()];
 }
 
 
@@ -310,7 +320,7 @@ Foam::UList<T>::rend() const
 template<class T>
 inline Foam::label Foam::UList<T>::size() const
 {
-    return size_;
+    return v_.get_num_elems();
 }
 
 
@@ -324,7 +334,7 @@ inline Foam::label Foam::UList<T>::max_size() const
 template<class T>
 inline bool Foam::UList<T>::empty() const
 {
-    return !size_;
+    return !size();
 }
 
 

@@ -345,7 +345,7 @@ void checkFields
 // member operator : this field f OP s
 
 #define TFOR_ALL_F_OP_S(typeF, f, OP, typeS, s)                                \
-                                                                               \
+    /* TODO add non raw loop variants to List */                               \
     /* set access to f at end of field */                                      \
     List_ACCESS(typeF, f, fP);                                                 \
                                                                                \

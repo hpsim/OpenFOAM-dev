@@ -33,7 +33,6 @@ License
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 
-// NOTE move this to memoryHandlerBase
 template<class T>
 void Foam::UList<T>::deepCopy(const UList<T>& a)
 {
@@ -71,20 +70,14 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {
-    List_ACCESS(T, (*this), vp);
-    List_FOR_ALL((*this), i)
-        List_ELEM((*this), vp, i) = t;
-    List_END_FOR_ALL
+    v_.fill(t);
 }
 
 
 template<class T>
 void Foam::UList<T>::operator=(const zero)
 {
-    List_ACCESS(T, (*this), vp);
-    List_FOR_ALL((*this), i)
-        List_ELEM((*this), vp, i) = Zero;
-    List_END_FOR_ALL
+    v_.fill(Zero);
 }
 
 
@@ -93,8 +86,7 @@ void Foam::UList<T>::operator=(const zero)
 template<class T>
 void Foam::UList<T>::swap(UList<T>& a)
 {
-    Swap(size_, a.size_);
-    Swap(v_, a.v_);
+    // TODO implement
 }
 
 
@@ -111,42 +103,46 @@ std::streamsize Foam::UList<T>::byteSize() const
             << abort(FatalError);
     }
 
-    return this->size_*sizeof(T);
+    return this->v_.get_num_elems()*sizeof(T);
 }
 
+
+// * * * * * * * * * * * * * * * Free Functions  * * * * * * * * * * * * * //
 
 template<class T>
 void Foam::sort(UList<T>& a)
 {
-    std::sort(a.begin(), a.end());
+    // TODO implement
+    //std::sort(a.begin(), a.end());
 }
 
 
 template<class T, class Cmp>
 void Foam::sort(UList<T>& a, const Cmp& cmp)
 {
-    std::sort(a.begin(), a.end(), cmp);
+    // TODO implement
+    //std::sort(a.begin(), a.end());
 }
 
 
 template<class T>
 void Foam::stableSort(UList<T>& a)
 {
-    std::stable_sort(a.begin(), a.end());
+    // TODO implement
 }
 
 
 template<class T, class Cmp>
 void Foam::stableSort(UList<T>& a, const Cmp& cmp)
 {
-    std::stable_sort(a.begin(), a.end(), cmp);
+    // TODO implement
 }
 
 
 template<class T>
 void Foam::shuffle(UList<T>& a)
 {
-    std::random_shuffle(a.begin(), a.end());
+    // TODO implement
 }
 
 
@@ -155,21 +151,8 @@ void Foam::shuffle(UList<T>& a)
 template<class T>
 bool Foam::UList<T>::operator==(const UList<T>& a) const
 {
-    if (this->size_ != a.size_)
-    {
-        return false;
-    }
-
-    bool equal = true;
-
-    List_CONST_ACCESS(T, (*this), vp);
-    List_CONST_ACCESS(T, (a), ap);
-
-    List_FOR_ALL((*this), i)
-        equal = equal && (List_ELEM((*this), vp, i) == List_ELEM((a), ap, i));
-    List_END_FOR_ALL
-
-    return equal;
+    // TODO implement
+    return false
 }
 
 
@@ -183,31 +166,8 @@ bool Foam::UList<T>::operator!=(const UList<T>& a) const
 template<class T>
 bool Foam::UList<T>::operator<(const UList<T>& a) const
 {
-    for
-    (
-        const_iterator vi = begin(), ai = a.begin();
-        vi < end() && ai < a.end();
-        vi++, ai++
-    )
-    {
-        if (*vi < *ai)
-        {
-            return true;
-        }
-        else if (*vi > *ai)
-        {
-            return false;
-        }
-    }
-
-    if (this->size_ < a.size_)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    // TODO implement
+    return false
 }
 
 
@@ -221,7 +181,8 @@ bool Foam::UList<T>::operator>(const UList<T>& a) const
 template<class T>
 bool Foam::UList<T>::operator<=(const UList<T>& a) const
 {
-    return !operator>(a);
+    // TODO implement
+    return false
 }
 
 
