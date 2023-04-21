@@ -253,7 +253,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cend() const
 {
-    return &values_.get_data()[size()];
+    return &values_.get_const_data()[size()];
 }
 
 
