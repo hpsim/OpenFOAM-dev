@@ -235,7 +235,7 @@ template<class T>
 inline typename Foam::UList<T>::iterator
 Foam::UList<T>::end()
 {
-    return &v_[size()];
+    return &v_.get_data()[this->size()];
 }
 
 
