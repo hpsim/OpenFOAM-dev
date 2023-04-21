@@ -42,7 +42,7 @@ template<class T>
 inline Foam::UList<T>::UList(T* __restrict__ v, label size)
 :
     size_(size),
-    v_(v)
+    v_(v),
     values_(gko::array<T>::view(
         gko::share(gko::ReferenceExecutor::create()),
         size,
