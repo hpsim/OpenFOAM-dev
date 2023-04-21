@@ -49,7 +49,7 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
         #ifdef USEMEMCPY
         if (contiguous<T>())
         {
-            memcpy(this->v_, a.v_, this->byteSize());
+            memcpy(this->values_, a.values_, this->byteSize());
         }
         else
         #endif
@@ -70,14 +70,14 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {
-    v_.fill(t);
+    values_.fill(t);
 }
 
 
 template<class T>
 void Foam::UList<T>::operator=(const zero)
 {
-    v_.fill(Zero);
+    values_.fill(Zero);
 }
 
 
@@ -103,7 +103,7 @@ std::streamsize Foam::UList<T>::byteSize() const
             << abort(FatalError);
     }
 
-    return this->v_.get_num_elems()*sizeof(T);
+    return this->values_.get_num_elems()*sizeof(T);
 }
 
 
