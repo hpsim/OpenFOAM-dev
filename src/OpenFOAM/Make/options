@@ -1,7 +1,7 @@
 EXE_INC = \
-    -I$(OBJECTS_DIR)
+    -I$(OBJECTS_DIR) -I$(WM_COMPUTE_BACKEND_DIR)
 
 LIB_LIBS = \
     $(FOAM_LIBBIN)/libOSspecific.o \
-    -L$(FOAM_LIBBIN)/dummy -lPstream \
+    -L$(FOAM_LIBBIN)/dummy -lPstream -lginkgo \
     -lz
