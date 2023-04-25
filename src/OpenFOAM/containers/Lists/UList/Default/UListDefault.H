@@ -74,13 +74,11 @@ typedef UList<label> labelUList;
 template<class T>
 class UList
 {
-    // TODO remove this in favor of memoryHandler_
     //- Number of elements in UList
     label size_;
 
     //- Vector of values of type T
     T* __restrict__ v_;
-    // TODO end remove
 
     // MemoryHandler* memoryHandler_;
 
