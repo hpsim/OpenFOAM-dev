@@ -320,11 +320,11 @@ List<T> readList(Istream&);
 #ifdef NoRepository
     #if WM_COMPUTE_BACKEND == Default
         #pragma message "[Compile] Default CPU memory manager"
-        #include "ListCDefault.H"
+        #include "ListDefault.C"
     #elif WM_COMPUTE_BACKEND == Ginkgo
         // all files are collected in central folder disregarding sub-folders
         #pragma message "[Compile] Ginkgo memory manager"
-        #include "UListCGinkgo.H"
+        #include "UListGinkgo.C"
     #endif
 #endif
 
