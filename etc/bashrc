@@ -102,7 +102,7 @@ export FOAM_SIGFPE=
 
 #- Compute Backend
 #    WM_COMPUTE_BACKEND = Default | Ginkgo
-export WM_COMPUTE_BACKEND=Ginkgo
+export WM_COMPUTE_BACKEND=Default
 
 ################################################################################
 
