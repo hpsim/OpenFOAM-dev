@@ -306,25 +306,27 @@ List<T> readList(Istream&);
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#if WM_COMPUTE_BACKEND == Default
+#ifdef WM_COMPUTE_BACKEND_Default
     #pragma message "[Compile] Default CPU memory manager"
     #include "ListIDefault.H"
-#elif WM_COMPUTE_BACKEND == Ginkgo
+#endif
+#ifdef WM_COMPUTE_BACKEND_Ginkgo
     // all files are collected in central folder disregarding sub-folders
     #pragma message "[Compile] Ginkgo memory manager"
-    #include "UListIGinkgo.H"
+    #include "ListIGinkgo.H"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #if WM_COMPUTE_BACKEND == Default
+    #ifdef WM_COMPUTE_BACKEND_Default
         #pragma message "[Compile] Default CPU memory manager"
         #include "ListDefault.C"
-    #elif WM_COMPUTE_BACKEND == Ginkgo
+    #endif
+    #ifdef WM_COMPUTE_BACKEND_Ginkgo
         // all files are collected in central folder disregarding sub-folders
         #pragma message "[Compile] Ginkgo memory manager"
-        #include "UListGinkgo.C"
+        #include "ListGinkgo.C"
     #endif
 #endif
 

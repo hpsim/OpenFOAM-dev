@@ -35,7 +35,7 @@ inline Foam::UList<T>::UList()
     size_(0),
     v_(NULL),
     values_(gko::share(gko::ReferenceExecutor::create()))
-{}
+{std::cout << "Gingko ctr " << endl;}
 
 
 template<class T>
@@ -48,7 +48,7 @@ inline Foam::UList<T>::UList(T* __restrict__ v, label size)
         size,
         v)
     )
-{}
+{std::cout << "Gingko ctr " << endl;}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //

@@ -70,14 +70,14 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {
-    values_.fill(t);
+    //values_.fill(t);
 }
 
 
 template<class T>
 void Foam::UList<T>::operator=(const zero)
 {
-    values_.fill(Zero);
+    //values_.fill(Zero);
 }
 
 

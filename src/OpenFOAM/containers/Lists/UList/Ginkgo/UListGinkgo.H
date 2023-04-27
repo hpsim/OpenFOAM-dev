@@ -499,6 +499,31 @@ void writeListEntries(Ostream& os, const word& keyword, const ListType& l);
 
 // TODO add some free functions for UList+=(UList) and UList*=(UList)
 
+// By default keep all stuff in the buffer and only specialise on scalar
+// these types needs special handling
+//
+//undefined reference to `gko::array<Foam::Vector<double> >::fill(Foam::Vector<double>)'                    
+//undefined reference to `gko::array<Foam::SymmTensor<double> >::fill(Foam::SymmTensor<double>)'            
+///undefined reference to `gko::array<unsigned int>::fill(unsigned int)'                   
+///undefined reference to `gko::array<Foam::List<double> >::fill(Foam::List<double>)'     
+///undefined reference to `gko::array<Foam::pointConstraint>::fill(Foam::pointConstraint)'
+///undefined reference to `gko::array<Foam::volumeType>::fill(Foam::volumeType)'          
+///undefined reference to `gko::array<Foam::Pair<int> >::fill(Foam::Pair<int>)'            
+///undefined reference to `gko::array<Foam::FixedList<int, 3u> >::fill(Foam::FixedList<int,
+//		3u>)'
+///undefined reference to `gko::array<Foam::cellModel*>::fill(Foam::cellModel*)'           
+///undefined reference to `gko::array<Foam::List<Foam::remote> >::fill(Foam::List<Foam::remote>)'
+///undefined reference to `gko::array<Foam::List<Foam::Pair<int> > >::fill(Foam::List<Foam::Pair<int> >)'
+///undefined reference to `gko::array<Foam::Tensor<double> >::fill(Foam::Tensor<double>)'
+///undefined reference to `gko::array<Foam::SphericalTensor<double> >::fill(Foam::SphericalTensor<double>)'
+///ndefined reference to `gko::array<Foam::triFace>::fill(Foam::triFace)'                 
+///undefined reference to `gko::array<Foam::PointIndexHit<Foam::Vector<double> > >::fill(Foam::PointIndexHit<Foam::Vector<double> >)'
+///undefined reference to `gko::array<bool>::fill(bool)'                                  
+///undefined reference to `gko::array<Foam::List<Foam::fileName> >::fill(Foam::List<Foam::fileName>)'
+///undefined reference to `gko::array<Foam::fileName>::fill(Foam::fileName)'               
+///`gko::array<Foam::List<Foam::patchToPatches::intersection::couple> >::fill(Foam::List<Foam::patchToPatches::intersection::couple>)'
+///undefined reference to `gko::OmpExecutor::get_scoped_device_id() const'                 
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository

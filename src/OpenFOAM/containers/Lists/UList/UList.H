@@ -42,11 +42,13 @@ SourceFiles
 #ifndef UList_H
 #define UList_H
 
-#if WM_COMPUTE_BACKEND == Default
+
+// all files are collected in central folder disregarding sub-folders
+#ifdef WM_COMPUTE_BACKEND_Default
     #pragma message "[Compile] Default CPU memory manager"
     #include "UListDefault.H"
-#elif WM_COMPUTE_BACKEND == Ginkgo
-    // all files are collected in central folder disregarding sub-folders
+#endif
+#ifdef WM_COMPUTE_BACKEND_Ginkgo
     #pragma message "[Compile] Ginkgo memory manager"
     #include "UListGinkgo.H"
 #endif
