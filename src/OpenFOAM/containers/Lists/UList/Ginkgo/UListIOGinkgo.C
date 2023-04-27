@@ -157,10 +157,10 @@ Foam::Ostream& Foam::operator<<(Foam::Ostream& os, const Foam::UList<T>& L)
     {
         os << nl << L.size() << nl;
         // TODO
-        // if (L.size())
-        // {
-        //     os.write(reinterpret_cast<const char*>(L.v_), L.byteSize());
-        // }
+        if (L.size())
+        {
+            os.write(reinterpret_cast<const char*>(L.v_), L.byteSize());
+        }
     }
 
     // Check state of IOstream

@@ -66,18 +66,51 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 
 // * * * * * * * * * * * * * * * Member Operators  * * * * * * * * * * * * * //
 
-// NOTE this would be a fill
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {
-    //values_.fill(t);
+    List_ACCESS(T, (*this), vp);
+    List_FOR_ALL((*this), i)
+        List_ELEM((*this), vp, i) = t;
+    List_END_FOR_ALL
+}
+
+
+template<>
+void Foam::UList<Foam::scalar>::operator=(const Foam::scalar& t)
+{
+    values_.fill(t);
+}
+
+
+template<>
+void Foam::UList<Foam::label>::operator=(const Foam::label& t)
+{
+    values_.fill(t);
 }
 
 
 template<class T>
 void Foam::UList<T>::operator=(const zero)
 {
-    //values_.fill(Zero);
+    List_ACCESS(T, (*this), vp);
+    List_FOR_ALL((*this), i)
+        List_ELEM((*this), vp, i) = Zero;
+    List_END_FOR_ALL
+}
+
+
+template<>
+void Foam::UList<Foam::scalar>::operator=(const zero)
+{
+    values_.fill(Zero);
+}
+
+
+template<>
+void Foam::UList<Foam::label>::operator=(const zero)
+{
+    values_.fill(Zero);
 }
 
 
@@ -86,9 +119,11 @@ void Foam::UList<T>::operator=(const zero)
 template<class T>
 void Foam::UList<T>::swap(UList<T>& a)
 {
-    // TODO implement
+    Swap(size_, a.size_);
+    Swap(v_, a.v_);
 }
 
+// TODO specialize for label and scalar
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
@@ -109,50 +144,62 @@ std::streamsize Foam::UList<T>::byteSize() const
 
 // * * * * * * * * * * * * * * * Free Functions  * * * * * * * * * * * * * //
 
+
 template<class T>
 void Foam::sort(UList<T>& a)
 {
-    // TODO implement
-    //std::sort(a.begin(), a.end());
+    std::sort(a.begin(), a.end());
 }
 
 
 template<class T, class Cmp>
 void Foam::sort(UList<T>& a, const Cmp& cmp)
 {
-    // TODO implement
-    //std::sort(a.begin(), a.end());
+    std::sort(a.begin(), a.end(), cmp);
 }
 
 
 template<class T>
 void Foam::stableSort(UList<T>& a)
 {
-    // TODO implement
+    std::stable_sort(a.begin(), a.end());
 }
 
 
 template<class T, class Cmp>
 void Foam::stableSort(UList<T>& a, const Cmp& cmp)
 {
-    // TODO implement
+    std::stable_sort(a.begin(), a.end(), cmp);
 }
 
 
 template<class T>
 void Foam::shuffle(UList<T>& a)
 {
-    // TODO implement
+    std::random_shuffle(a.begin(), a.end());
 }
 
 
 // * * * * * * * * * * * * * * * Member Operators  * * * * * * * * * * * * * //
-
+//
 template<class T>
 bool Foam::UList<T>::operator==(const UList<T>& a) const
 {
-    // TODO implement
-    return false;
+    if (this->size_ != a.size_)
+    {
+        return false;
+    }
+
+    bool equal = true;
+
+    List_CONST_ACCESS(T, (*this), vp);
+    List_CONST_ACCESS(T, (a), ap);
+
+    List_FOR_ALL((*this), i)
+        equal = equal && (List_ELEM((*this), vp, i) == List_ELEM((a), ap, i));
+    List_END_FOR_ALL
+
+    return equal;
 }
 
 
@@ -166,8 +213,31 @@ bool Foam::UList<T>::operator!=(const UList<T>& a) const
 template<class T>
 bool Foam::UList<T>::operator<(const UList<T>& a) const
 {
-    // TODO implement
-    return false;
+    for
+    (
+        const_iterator vi = begin(), ai = a.begin();
+        vi < end() && ai < a.end();
+        vi++, ai++
+    )
+    {
+        if (*vi < *ai)
+        {
+            return true;
+        }
+        else if (*vi > *ai)
+        {
+            return false;
+        }
+    }
+
+    if (this->size_ < a.size_)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -181,8 +251,7 @@ bool Foam::UList<T>::operator>(const UList<T>& a) const
 template<class T>
 bool Foam::UList<T>::operator<=(const UList<T>& a) const
 {
-    // TODO implement
-    return false;
+    return !operator>(a);
 }
 
 
@@ -191,6 +260,7 @@ bool Foam::UList<T>::operator>=(const UList<T>& a) const
 {
     return !operator<(a);
 }
+
 
 
 // * * * * * * * * * * * * * * * *  IOStream operators * * * * * * * * * * * //

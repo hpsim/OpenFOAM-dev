@@ -26,6 +26,7 @@ License
 #include "error.H"
 #include "pTraits.H"
 #include "Swap.H"
+#include "label.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -43,13 +44,32 @@ inline Foam::UList<T>::UList(T* __restrict__ v, label size)
 :
     size_(size),
     v_(v),
-    values_(gko::array<T>::view(
+    values_(gko::share(gko::ReferenceExecutor::create()))
+{std::cout << "Gingko UList generic ctr " << endl;}
+
+template<>
+inline Foam::UList<Foam::scalar>::UList(Foam::scalar* __restrict__ v, label size)
+:
+    size_(size),
+    v_(v),
+    values_(gko::array<Foam::scalar>::view(
         gko::share(gko::ReferenceExecutor::create()),
         size,
         v)
     )
-{std::cout << "Gingko ctr " << endl;}
+{std::cout << "Gingko UList scalar ctr " << endl;}
 
+template<>
+inline Foam::UList<Foam::label>::UList(Foam::label* __restrict__ v, label size)
+:
+    size_(size),
+    v_(v),
+    values_(gko::array<Foam::label>::view(
+        gko::share(gko::ReferenceExecutor::create()),
+        size,
+        v)
+    )
+{std::cout << "Gingko UList scalar ctr " << endl;}
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
@@ -183,7 +203,38 @@ inline T& Foam::UList<T>::operator[](const label i)
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return values_.get_data()[i];
+    return v_[i];
+}
+
+template<>
+inline Foam::scalar& Foam::UList<Foam::scalar>::operator[](const label i)
+{
+    // TODO
+    // read access to memory
+    // 1. check if host side buffer is needed
+    // if not just return value (reference executor)
+    // else set sync flag to indicate that host side
+    // buffer was modified
+    #ifdef FULLDEBUG
+    checkIndex(i);
+    #endif
+    return v_.get_data()[i];
+}
+
+
+template<>
+inline label& Foam::UList<label>::operator[](const label i)
+{
+    // TODO
+    // read access to memory
+    // 1. check if host side buffer is needed
+    // if not just return value (reference executor)
+    // else set sync flag to indicate that host side
+    // buffer was modified
+    #ifdef FULLDEBUG
+    checkIndex(i);
+    #endif
+    return v_.get_data()[i];
 }
 
 
@@ -212,6 +263,26 @@ inline const T& Foam::UList<T>::operator[](const label i) const
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
+    return v_[i];
+}
+
+
+template<>
+inline const Foam::scalar& Foam::UList<Foam::scalar>::operator[](const label i) const
+{
+    #ifdef FULLDEBUG
+    checkIndex(i);
+    #endif
+    return values_.get_const_data()[i];
+}
+
+
+template<>
+inline const Foam::label& Foam::UList<Foam::label>::operator[](const label i) const
+{
+    #ifdef FULLDEBUG
+    checkIndex(i);
+    #endif
     return values_.get_const_data()[i];
 }
 
@@ -229,6 +300,22 @@ template<class T>
 inline typename Foam::UList<T>::iterator
 Foam::UList<T>::begin()
 {
+    return v_;
+}
+
+
+template<>
+inline typename Foam::UList<Foam::scalar>::iterator
+Foam::UList<Foam::scalar>::begin()
+{
+    return values_.get_data();
+}
+
+
+template<>
+inline typename Foam::UList<Foam::label>::iterator
+Foam::UList<Foam::label>::begin()
+{
     return values_.get_data();
 }
 
@@ -241,9 +328,33 @@ Foam::UList<T>::end()
 }
 
 
+template<>
+inline typename Foam::UList<Foam::scalar>::iterator
+Foam::UList<Foam::scalar>::end()
+{
+    return &values_.get_data()[this->size()];
+}
+
+
 template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cbegin() const
+{
+    return v_;
+}
+
+
+template<>
+inline typename Foam::UList<Foam::label>::const_iterator
+Foam::UList<Foam::label>::cbegin() const
+{
+    return values_.get_const_data();
+}
+
+
+template<>
+inline typename Foam::UList<Foam::scalar>::const_iterator
+Foam::UList<Foam::scalar>::cbegin() const
 {
     return values_.get_const_data();
 }
@@ -253,6 +364,22 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::cend() const
 {
+    return &v_[this->size_];
+}
+
+
+template<>
+inline typename Foam::UList<Foam::label>::const_iterator
+Foam::UList<Foam::label>::cend() const
+{
+    return &values_.get_const_data()[size()];
+}
+
+
+template<>
+inline typename Foam::UList<Foam::scalar>::const_iterator
+Foam::UList<Foam::scalar>::cend() const
+{
     return &values_.get_const_data()[size()];
 }
 
@@ -261,6 +388,22 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::begin() const
 {
+    return v_.get_const_data();
+}
+
+
+template<>
+inline typename Foam::UList<Foam::scalar>::const_iterator
+Foam::UList<Foam::scalar>::begin() const
+{
+    return values_.get_const_data();
+}
+
+
+template<>
+inline typename Foam::UList<Foam::label>::const_iterator
+Foam::UList<Foam::label>::begin() const
+{
     return values_.get_const_data();
 }
 
@@ -268,6 +411,22 @@ Foam::UList<T>::begin() const
 template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::end() const
+{
+    return &values_[this->size_];
+}
+
+
+template<>
+inline typename Foam::UList<Foam::label>::const_iterator
+Foam::UList<Foam::label>::end() const
+{
+    return &values_.get_const_data()[size()];
+}
+
+
+template<>
+inline typename Foam::UList<Foam::scalar>::const_iterator
+Foam::UList<Foam::scalar>::end() const
 {
     return &values_.get_const_data()[size()];
 }
@@ -324,7 +483,7 @@ Foam::UList<T>::rend() const
 template<class T>
 inline Foam::label Foam::UList<T>::size() const
 {
-    return values_.get_num_elems();
+    return size_;
 }
 
 

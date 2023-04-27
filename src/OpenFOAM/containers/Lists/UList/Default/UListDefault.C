@@ -67,7 +67,6 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 
 // * * * * * * * * * * * * * * * Member Operators  * * * * * * * * * * * * * //
 
-// NOTE this would be a fill
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {
