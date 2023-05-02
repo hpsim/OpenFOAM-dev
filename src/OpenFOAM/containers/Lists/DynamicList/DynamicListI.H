@@ -29,7 +29,9 @@ template<class T, unsigned SizeInc, unsigned SizeMult, unsigned SizeDiv>
 inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList()
 :
     capacity_(0)
-{}
+{
+    std::cout << __FILE__  << __func__ << endl;
+}
 
 
 template<class T, unsigned SizeInc, unsigned SizeMult, unsigned SizeDiv>
@@ -41,6 +43,7 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
     List<T>(nElem),
     capacity_(nElem)
 {
+    std::cout << __FILE__  << __func__ << endl;
     // We could also enforce SizeInc granularity when (!SizeMult || !SizeDiv)
     List<T>::size(0);
 }
@@ -55,7 +58,9 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
 :
     List<T>(nElem, a),
     capacity_(nElem)
-{}
+{
+    std::cout << __FILE__  << __func__ << endl;
+}
 
 
 template<class T, unsigned SizeInc, unsigned SizeMult, unsigned SizeDiv>
@@ -66,7 +71,9 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
 :
     List<T>(lst),
     capacity_(lst.size())
-{}
+{
+    std::cout << __FILE__  << __func__ << endl;
+}
 
 
 template<class T, unsigned SizeInc, unsigned SizeMult, unsigned SizeDiv>
@@ -78,6 +85,7 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
     List<T>(move(lst)),
     capacity_(lst.capacity_)
 {
+    std::cout << __FILE__  << __func__ << endl;
     lst.capacity_ = 0;
 }
 
@@ -90,7 +98,9 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
 :
     List<T>(lst),
     capacity_(lst.size())
-{}
+{
+    std::cout << __FILE__  << __func__ << endl;
+}
 
 
 template<class T, unsigned SizeInc, unsigned SizeMult, unsigned SizeDiv>
@@ -101,7 +111,9 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
 :
     List<T>(lst),
     capacity_(lst.size())
-{}
+{
+    std::cout << __FILE__  << __func__ << endl;
+}
 
 
 template<class T, unsigned SizeInc, unsigned SizeMult, unsigned SizeDiv>
@@ -112,7 +124,9 @@ inline Foam::DynamicList<T, SizeInc, SizeMult, SizeDiv>::DynamicList
 :
     List<T>(move(lst)),
     capacity_(List<T>::size())
-{}
+{
+    std::cout << __FILE__  << __func__ << endl;
+}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //

@@ -69,6 +69,7 @@ void Foam::UList<T>::deepCopy(const UList<T>& a)
 template<class T>
 void Foam::UList<T>::operator=(const T& t)
 {
+    // check for type, if it is scalar or label use fill
     List_ACCESS(T, (*this), vp);
     List_FOR_ALL((*this), i)
         List_ELEM((*this), vp, i) = t;
@@ -76,23 +77,25 @@ void Foam::UList<T>::operator=(const T& t)
 }
 
 
-template<>
-void Foam::UList<Foam::scalar>::operator=(const Foam::scalar& t)
-{
-    values_.fill(t);
-}
-
-
-template<>
-void Foam::UList<Foam::label>::operator=(const Foam::label& t)
-{
-    values_.fill(t);
-}
+// cannot specialize here
+//template<>
+//void Foam::UList<Foam::scalar>::operator=(const Foam::scalar& t)
+//{
+//    values_.fill(t);
+//}
+//
+//
+//template<>
+//void Foam::UList<Foam::label>::operator=(const Foam::label& t)
+//{
+//    values_.fill(t);
+//}
 
 
 template<class T>
 void Foam::UList<T>::operator=(const zero)
 {
+    // check for type, if it is scalar or label use fill
     List_ACCESS(T, (*this), vp);
     List_FOR_ALL((*this), i)
         List_ELEM((*this), vp, i) = Zero;
@@ -100,18 +103,18 @@ void Foam::UList<T>::operator=(const zero)
 }
 
 
-template<>
-void Foam::UList<Foam::scalar>::operator=(const zero)
-{
-    values_.fill(Zero);
-}
-
-
-template<>
-void Foam::UList<Foam::label>::operator=(const zero)
-{
-    values_.fill(Zero);
-}
+//template<>
+//void Foam::UList<Foam::scalar>::operator=(const zero)
+//{
+//    values_.fill(Zero);
+//}
+//
+//
+//template<>
+//void Foam::UList<Foam::label>::operator=(const zero)
+//{
+//    values_.fill(Zero);
+//}
 
 
 // * * * * * * * * * * * * * * STL Member Functions  * * * * * * * * * * * * //

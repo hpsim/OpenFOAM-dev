@@ -112,6 +112,7 @@ class List
         template<class InputIterator>
         inline List(InputIterator first, InputIterator last, const label s);
 
+        void operatorEqImpl(const UList<T>&);
 
 protected:
 
@@ -286,6 +287,17 @@ public:
         //- Read List from Istream, discarding contents of existing List
         friend Istream& operator>> <T>
         (Istream&, List<T>&);
+
+    // Implementation specific functions
+    // Mainly to avoid blowing up number of LOC
+    // TODO at a later stage one use same procedure as for UList
+#ifdef WM_COMPUTE_BACKEND_Ginkgo
+	void setSizeGkoImpl_(const label newSize); 
+
+	void setSizeGkoImpl_(const label newSize, const T& a); 
+
+	void transferGkoImpl_(List<T>& a);
+#endif
 };
 
 

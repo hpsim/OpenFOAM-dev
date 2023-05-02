@@ -28,12 +28,44 @@ License
 template<class T>
 inline void Foam::List<T>::alloc()
 {
-    // TODO implement this
-    // if (this->size_ > 0)
-    // {
-    //     this->v_ = new T[this->size_];
-    // }
+    // Check if not allocated?
+    if (this->size_ > 0)
+    {
+         this->v_ = new T[this->size_];
+    }
 }
+
+template<>
+inline void Foam::List<Foam::scalar>::alloc()
+{
+    if (this->size_ > 0)
+    {
+	 // allocate a host side buffer 
+	 // not yet used
+         //this->v_ = new scalar[this->size_];
+         //this->values_ = gko::array<Foam::scalar>(
+			 //gko::share(gko::ReferenceExecutor::create()),
+		         //this->size_
+				 //);
+         this->values_.resize_and_reset(this->size_);
+    }
+}
+
+
+template<>
+inline void Foam::List<Foam::label>::alloc()
+{
+    if (this->size_ > 0)
+    {
+         //this->v_ = new label[this->size_];
+         //this->values_ = gko::array<Foam::label>(
+//			 gko::share(gko::ReferenceExecutor::create()),
+//		         this->size_
+//				 );
+         this->values_.resize_and_reset(this->size_);
+    }
+}
+
 
 
 template<class T>
@@ -48,6 +80,7 @@ inline void Foam::List<T>::reAlloc(const label s)
 }
 
 
+// TODO add Ginkgo variant to it
 template<class T>
 template<class List2>
 inline void Foam::List<T>::copyList(const List2& lst)
@@ -125,14 +158,29 @@ inline const Foam::List<T>& Foam::List<T>::null()
 template<class T>
 inline void Foam::List<T>::clear()
 {
-    // TODO implement this
-    // if (this->v_)
-    // {
-    //     delete[] this->v_;
-    //     this->v_ = 0;
-    // }
+    if (this->v_)
+    {
+        delete[] this->v_;
+        this->v_ = 0;
+    }
 
-    // this->size_ = 0;
+    this->size_ = 0;
+}
+
+
+template<>
+inline void Foam::List<Foam::scalar>::clear()
+{
+    this->values_.clear();
+    this->size_ = 0;
+}
+
+
+template<>
+inline void Foam::List<Foam::label>::clear()
+{
+    this->values_.clear();
+    this->size_ = 0;
 }
 
 
@@ -165,7 +213,9 @@ inline T& Foam::List<T>::newElmt(const label i)
 template<class T>
 inline void Foam::List<T>::size(const label n)
 {
-    UList<T>::size_ = n;
+    //UList<T>::size_ = n;
+	std::cout << __FILE__ << __func__ << endl;
+    resize(n);
 }
 
 

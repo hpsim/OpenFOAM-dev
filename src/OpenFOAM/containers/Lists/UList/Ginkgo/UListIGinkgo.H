@@ -34,7 +34,7 @@ template<class T>
 inline Foam::UList<T>::UList()
 :
     size_(0),
-    v_(NULL),
+    v_(0),
     values_(gko::share(gko::ReferenceExecutor::create()))
 {std::cout << "Gingko ctr " << endl;}
 
@@ -52,10 +52,10 @@ inline Foam::UList<Foam::scalar>::UList(Foam::scalar* __restrict__ v, label size
 :
     size_(size),
     v_(v),
-    values_(gko::array<Foam::scalar>::view(
+    values_(//gko::array<Foam::scalar>::view(
         gko::share(gko::ReferenceExecutor::create()),
-        size,
-        v)
+        size
+        //,v)
     )
 {std::cout << "Gingko UList scalar ctr " << endl;}
 
@@ -64,10 +64,10 @@ inline Foam::UList<Foam::label>::UList(Foam::label* __restrict__ v, label size)
 :
     size_(size),
     v_(v),
-    values_(gko::array<Foam::label>::view(
+    values_(//gko::array<Foam::label>::view(
         gko::share(gko::ReferenceExecutor::create()),
-        size,
-        v)
+        size
+        //,v)
     )
 {std::cout << "Gingko UList scalar ctr " << endl;}
 
@@ -167,6 +167,20 @@ inline const T& Foam::UList<T>::last() const
 template<class T>
 inline const T* Foam::UList<T>::cdata() const
 {
+    return v_;
+}
+
+
+template<>
+inline const Foam::scalar* Foam::UList<Foam::scalar>::cdata() const
+{
+    return values_.get_const_data();
+}
+
+
+template<>
+inline const Foam::label* Foam::UList<Foam::label>::cdata() const
+{
     return values_.get_const_data();
 }
 
@@ -174,8 +188,22 @@ inline const T* Foam::UList<T>::cdata() const
 template<class T>
 inline T* Foam::UList<T>::data()
 {
+    return v_;
+}
+
+
+template<>
+inline Foam::scalar* Foam::UList<Foam::scalar>::data()
+{
     return values_.get_data();
 }
+
+template<>
+inline Foam::label* Foam::UList<Foam::label>::data()
+{
+    return values_.get_data();
+}
+
 
 
 template<class T>
@@ -183,8 +211,30 @@ inline void Foam::UList<T>::shallowCopy(const UList<T>& a)
 {
     // TODO implement
     // this would be just another view
-    // size() = a.size();
-    // v_ = a.v_;
+    size_ = a.size();
+    v_ = a.v_;
+}
+
+
+template<>
+inline void Foam::UList<Foam::scalar>::shallowCopy(const UList<Foam::scalar>& a)
+{
+    // TODO implement
+    // this would be just another view
+        FatalErrorInFunction
+            << __func__ << "not implemented for scalar"
+            << abort(FatalError);
+}
+
+
+template<>
+inline void Foam::UList<Foam::label>::shallowCopy(const UList<Foam::label>& a)
+{
+    // TODO implement
+    // this would be just another view
+        FatalErrorInFunction
+            << __func__ << "not implemented for label"
+            << abort(FatalError);
 }
 
 
@@ -194,6 +244,7 @@ inline void Foam::UList<T>::shallowCopy(const UList<T>& a)
 template<class T>
 inline T& Foam::UList<T>::operator[](const label i)
 {
+    std::cout << __FILE__  << __func__ << endl;
     // TODO
     // read access to memory
     // 1. check if host side buffer is needed
@@ -209,6 +260,7 @@ inline T& Foam::UList<T>::operator[](const label i)
 template<>
 inline Foam::scalar& Foam::UList<Foam::scalar>::operator[](const label i)
 {
+    std::cout << __FILE__  << __func__ << "scalar" << endl;
     // TODO
     // read access to memory
     // 1. check if host side buffer is needed
@@ -218,13 +270,14 @@ inline Foam::scalar& Foam::UList<Foam::scalar>::operator[](const label i)
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return v_.get_data()[i];
+    return values_.get_data()[i];
 }
 
 
 template<>
-inline label& Foam::UList<label>::operator[](const label i)
+inline Foam::label& Foam::UList<Foam::label>::operator[](const label i)
 {
+    std::cout << __FILE__  << __func__ << "label" << endl;
     // TODO
     // read access to memory
     // 1. check if host side buffer is needed
@@ -234,7 +287,7 @@ inline label& Foam::UList<label>::operator[](const label i)
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
-    return v_.get_data()[i];
+    return values_.get_data()[i];
 }
 
 
@@ -260,6 +313,7 @@ namespace Foam
 template<class T>
 inline const T& Foam::UList<T>::operator[](const label i) const
 {
+    std::cout << __FILE__  << __func__ << endl;
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
@@ -270,6 +324,7 @@ inline const T& Foam::UList<T>::operator[](const label i) const
 template<>
 inline const Foam::scalar& Foam::UList<Foam::scalar>::operator[](const label i) const
 {
+    std::cout << __FILE__  << __func__ <<  "scalar " << endl;
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
@@ -280,6 +335,7 @@ inline const Foam::scalar& Foam::UList<Foam::scalar>::operator[](const label i) 
 template<>
 inline const Foam::label& Foam::UList<Foam::label>::operator[](const label i) const
 {
+    std::cout << __FILE__  << __func__ <<  "label " << endl;
     #ifdef FULLDEBUG
     checkIndex(i);
     #endif
@@ -388,7 +444,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::begin() const
 {
-    return v_.get_const_data();
+    return v_;
 }
 
 
@@ -412,7 +468,7 @@ template<class T>
 inline typename Foam::UList<T>::const_iterator
 Foam::UList<T>::end() const
 {
-    return &values_[this->size_];
+    return &v_[this->size_];
 }
 
 
