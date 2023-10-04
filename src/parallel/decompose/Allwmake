@@ -6,15 +6,15 @@ cd ${0%/*} || exit 1    # Run from this directory
 
 
 # Get SCOTCH_VERSION, SCOTCH_ARCH_PATH
-if settings=`$WM_PROJECT_DIR/bin/foamEtcFile config.sh/scotch`
-then
-    . $settings
-    echo "    using SCOTCH_ARCH_PATH=$SCOTCH_ARCH_PATH"
-else
-    echo
-    echo "    Error: no config.sh/scotch settings"
-    echo
-fi
+#if settings=`$WM_PROJECT_DIR/bin/foamEtcFile config.sh/scotch`
+#then
+#    . $settings
+#    echo "    using SCOTCH_ARCH_PATH=$SCOTCH_ARCH_PATH"
+#else
+#    echo
+#    echo "    Error: no config.sh/scotch settings"
+#    echo
+#fi
 
 
 # Define how to create an mpi-versioned library of $targetType
@@ -37,44 +37,44 @@ wmakeMpiLib()
 }
 
 
-if [ -n "$SCOTCH_ARCH_PATH" ]
-then
-    wmake $targetType scotchDecomp
+#if [ -n "$SCOTCH_ARCH_PATH" ]
+#then
+#    wmake $targetType scotchDecomp
+#
+#    if [ -n "$WM_MPLIB" ] && [ -d "$FOAM_LIBBIN/$FOAM_MPI" ]
+#    then
+#        wmakeMpiLib $SCOTCH_VERSION ptscotchDecomp
+#    fi
+#else
+#    echo "    skipping scotchDecomp (ptscotchDecomp)"
+#fi
 
-    if [ -n "$WM_MPLIB" ] && [ -d "$FOAM_LIBBIN/$FOAM_MPI" ]
-    then
-        wmakeMpiLib $SCOTCH_VERSION ptscotchDecomp
-    fi
-else
-    echo "    skipping scotchDecomp (ptscotchDecomp)"
-fi
 
-
-if settings=`$WM_PROJECT_DIR/bin/foamEtcFile config.sh/zoltan`
-then
-    . $settings
-    echo "    using ZOLTAN_ARCH_PATH=$ZOLTAN_ARCH_PATH"
-
-    if [ -n "$ZOLTAN_ARCH_PATH" ] \
-    && [ -r "$ZOLTAN_ARCH_PATH/include/zoltan.h" ] \
-    && { \
-         [ -r "$FOAM_EXT_LIBBIN/$FOAM_MPI/libzoltan.a" ] \
-      || [ -r "$ZOLTAN_ARCH_PATH/lib/libzoltan.a" ]; \
-       }
-    then
-        wmakeMpiLib $ZOLTAN_VERSION zoltanDecomp
-    else
-        echo "    skipping zoltanDecomp"
-    fi
-else
-    echo
-    echo "    Error: no config.sh/zoltan settings"
-    echo
-fi
+#if settings=`$WM_PROJECT_DIR/bin/foamEtcFile config.sh/zoltan`
+#then
+#    . $settings
+#    echo "    using ZOLTAN_ARCH_PATH=$ZOLTAN_ARCH_PATH"
+#
+#    if [ -n "$ZOLTAN_ARCH_PATH" ] \
+#    && [ -r "$ZOLTAN_ARCH_PATH/include/zoltan.h" ] \
+#    && { \
+#         [ -r "$FOAM_EXT_LIBBIN/$FOAM_MPI/libzoltan.a" ] \
+#      || [ -r "$ZOLTAN_ARCH_PATH/lib/libzoltan.a" ]; \
+#       }
+#    then
+#        wmakeMpiLib $ZOLTAN_VERSION zoltanDecomp
+#    else
+#        echo "    skipping zoltanDecomp"
+#    fi
+#else
+#    echo
+#    echo "    Error: no config.sh/zoltan settings"
+#    echo
+#fi
 
 
 # Optionally build metisDecomp with its Allwmake
-wmake -a $targetType metisDecomp
+# wmake -a $targetType metisDecomp
 
 wmake $targetType decompositionMethods
 
